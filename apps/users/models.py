@@ -16,7 +16,7 @@ class BaseModel(models.Model):
 
 class UserProfile(AbstractUser):
     '''
-    继承django自带的类  1、重写就是此类  2、要在setting中去设置，不然django不知道这是我们用户
+    继承django自带的类  1、重写就是此类  2、要在setting中去设置，不然django不知道这是我们用户表
     '''
     nick_name = models.CharField(max_length=50, verbose_name="昵称", default="")
     birthday = models.DateField(verbose_name="生日", null=True, blank=True)
