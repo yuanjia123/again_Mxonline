@@ -113,9 +113,9 @@ AUTH_PASSWORD_VALIDATORS = [
 #继承django自带的用户类  第二步
 AUTH_USER_MODEL = "users.UserProfile"
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-Hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 

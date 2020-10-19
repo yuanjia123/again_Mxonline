@@ -11,6 +11,7 @@ class BaseModel(models.Model):
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
     class Meta:
+        #这样就不会 创建表
         abstract = True
 
 class UserProfile(AbstractUser):
