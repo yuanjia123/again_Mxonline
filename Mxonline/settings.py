@@ -110,6 +110,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
+#继承django自带的用户类  第二步
+AUTH_USER_MODEL = "users.UserProfile"
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
