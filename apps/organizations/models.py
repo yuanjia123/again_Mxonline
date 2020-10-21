@@ -11,6 +11,9 @@ class City(BaseModel):
         verbose_name = "城市"
         verbose_name_plural = verbose_name
 
+    def __str__(self):
+        return self.name
+
 class CourseOrg(BaseModel):
     name = models.CharField(max_length=50, verbose_name="机构名称")
     desc = models.TextField(verbose_name="描述")
@@ -29,7 +32,8 @@ class CourseOrg(BaseModel):
 
     city = models.ForeignKey(City, on_delete=models.CASCADE, verbose_name="所在城市")
 
-
+    def __str__(self):
+        return self.name
     class Meta:
         verbose_name = "课程机构"
         verbose_name_plural = verbose_name

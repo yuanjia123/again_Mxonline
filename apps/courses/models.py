@@ -41,6 +41,8 @@ class Course(BaseModel):
         verbose_name = "课程信息"
         verbose_name_plural = verbose_name
 
+    def __str__(self):
+        return self.name
 
 
 class Lesson(BaseModel):
