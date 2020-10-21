@@ -2,10 +2,21 @@ import xadmin
 
 from apps.courses.models import Course, Lesson, Video,CourseResource
 
-#注册课程的模型
-class CourseAdmin(object):
-    pass
+class GlobalSettings(object):
+    site_title = "慕学后台管理系统"
+    site_footer = "慕学在线网"
+    # menu_style = "accordion"
 
+
+
+class BaseSettings(object):
+    #xadmin的主题 、皮肤
+    enable_themes = True
+    #皮肤
+    use_bootswatch = True
+
+
+#注册课程的模型
 class CourseAdmin(object):
     list_display = ['name', 'desc', 'detail', 'degree', 'learn_times', 'students']
     search_fields = ['name', 'desc', 'detail', 'degree', 'students']
@@ -35,3 +46,8 @@ xadmin.site.register(Course,CourseAdmin)
 xadmin.site.register(Lesson, LessonAdmin)
 xadmin.site.register(Video, VideoAdmin)
 xadmin.site.register(CourseResource, CourseResourceAdmin)
+
+#设置网站名
+xadmin.site.register(xadmin.views.CommAdminView, GlobalSettings)
+#主题以及下拉
+xadmin.site.register(xadmin.views.BaseAdminView, BaseSettings)
