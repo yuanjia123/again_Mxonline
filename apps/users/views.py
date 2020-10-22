@@ -19,7 +19,7 @@ class LoginView(View):
         #验证用户名、密码是否存在
         user = authenticate(username = user_name,password=password)
         if user is not None:
-            # 跳转到主页
+            # 如果登录成功 跳转到主页
             return HttpResponseRedirect(reverse('index'))
         else:
             return render(request,"login.html",{"msg":"用户名或者密码错误"})
