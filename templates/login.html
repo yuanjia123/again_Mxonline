@@ -70,6 +70,7 @@
                     <h2 class="active">账号登录</h2>
                     <h2 >动态登录</h2>
                 </div>
+
                 <form class="tab-form" action="{% url 'login' %}" method="post" autocomplete="off" id="form1">
                     {% csrf_token %}
                     <div class="form-group marb20 ">
@@ -78,12 +79,13 @@
                     <div class="form-group marb8 ">
                         <input name="password" id="password_l" type="password" placeholder="请输入您的密码" />
                     </div>
-                    <div class="error btns login-form-tips" id="jsLoginTips"></div>
+                    <div class="error btns login-form-tips" id="jsLoginTips">{{ msg }}</div>
                      <div class="auto-box marb38">
 						<a class="fr" href="forgetpwd.html">忘记密码？</a>
                      </div>
                      <input class="btn btn-green" id="jsLoginBtn" type="submit" value="立即登录 > " />
                 </form>
+
                 <form class="tab-form hide" id="mobile_register_form" autocomplete="off" method="post" id="form2">
 
                     <div class="form-group marb20">
