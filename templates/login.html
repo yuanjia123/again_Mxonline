@@ -73,13 +73,28 @@
 
                 <form class="tab-form" action="{% url 'login' %}" method="post" autocomplete="off" id="form1">
                     {% csrf_token %}
-                    <div class="form-group marb20 ">
-                        <input name="username" id="account_l" type="text" placeholder="手机号/邮箱" />
+                    {#                    class="form-group marb8 errorput"  输入框会变成红色，是一种样式   下面这样写如果验证不通过 输入框爆红#}
+                    <div class="form-group marb20 {% if login_form.errors.username %}errorput{% endif %}">
+{#                                                                        value="{{ login_form.username.value }} 当密码或者账号输入错误的时候、报错的同时会保留密码#}
+                        <input name="username" id="account_l" type="text" value="{{ login_form.username.value }}" placeholder="手机号/邮箱" />
                     </div>
-                    <div class="form-group marb8 ">
-                        <input name="password" id="password_l" type="password" placeholder="请输入您的密码" />
+{#                    class="form-group marb8 errorput"  输入框会变成红色，是一种样式   下面这样写如果验证不通过 输入框爆红#}
+                    <div class="form-group marb8 {% if login_form.errors.password %}errorput{% endif %}">
+                        <input name="password" id="password_l" type="password" value="{{ login_form.password.value }}" placeholder="请输入您的密码" />
                     </div>
-                    <div class="error btns login-form-tips" id="jsLoginTips">{{ msg }}</div>
+                    <div class="error btns login-form-tips" id="jsLoginTips">
+{#                        如果传递过来的login_form.error里面有值。说明验证不通过#}
+                        {% if login_form.errors %}
+                            {% for key,error in login_form.errors.items %}
+                                {{ error }}
+                            {% endfor %}
+{#                       否则验证通过、（验证通过值得是1、账号和密码都有值 且最小值大于3）    #}
+                        {% else %}
+{#                            进入到密码验证才会显示这个、账号或者密码输入错误#}
+                            {{ msg }}
+                        {% endif %}
+
+                    </div>
                      <div class="auto-box marb38">
 						<a class="fr" href="forgetpwd.html">忘记密码？</a>
                      </div>
@@ -89,10 +104,10 @@
                 <form class="tab-form hide" id="mobile_register_form" autocomplete="off" method="post" id="form2">
 
                     <div class="form-group marb20">
-                        <input id="jsRegMobile" name="mobile" type="text" placeholder="请输入您的手机号码">
+                        <input id="jsRegMobile" name="mobile"  type="text" placeholder="请输入您的手机号码">
                     </div>
                     <div class="form-group marb20 blur" id="jsRefreshCode">
-                        <input autocomplete="off" class="form-control-captcha mobile-register-captcha" id="mobile-register-captcha_1" name="captcha_m_1" placeholder="请输入验证码" type="text"> <input class="form-control-captcha mobile-register-captcha" id="mobile-register-captcha_0" name="captcha_m_0" placeholder="请输入验证码" type="hidden" value="f7ee32b98dff72e7c9248104b81b56c55188ec8a"> &nbsp;<img src="./多米乐首页_files/saved_resource" alt="captcha" class="captcha">
+                        <input autocomplete="off" class="form-control-captcha mobile-register-captcha"  id="mobile-register-captcha_1" name="captcha_m_1" placeholder="请输入验证码" type="text"> <input class="form-control-captcha mobile-register-captcha" id="mobile-register-captcha_0" name="captcha_m_0" placeholder="请输入验证码" type="hidden" value="f7ee32b98dff72e7c9248104b81b56c55188ec8a"> &nbsp;<img src="./多米乐首页_files/saved_resource" alt="captcha" class="captcha">
                     </div>
                     <div class="clearfix">
                         <div class="form-group marb8 verify-code">
