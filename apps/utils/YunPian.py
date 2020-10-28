@@ -4,7 +4,7 @@ def send_single_sms(apikey,code,mobile):
     url = "https://sms.yunpian.com/v2/sms/single_send.json"
 
     text = "【袁佳佳】您的验证码是{}".format(code)
-
+    a = 10
     res = requests.post(url,data={
         "apikey":apikey,
         "mobile":mobile,
