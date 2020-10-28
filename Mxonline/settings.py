@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'apps.operation.apps.OperationConfig',
     'crispy_forms',
     'xadmin.apps.XAdminConfig',
+    'captcha'
 ]
 
 MIDDLEWARE = [

@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 #跳转
 from django.urls import reverse
 
-from apps.users.forms import LoginForm
+from apps.users.forms import LoginForm,DynamicLoginForm
 
 #编写退出接口
 class LogoutView(View):
@@ -24,8 +24,14 @@ class LoginView(View):
         #在index.html页面里面27行 有判断是否登录 如果登录直接跳转到首页
         if request.user.is_authenticated:
             return HttpResponseRedirect(reverse("index"))
-        #否则跳转到登陆页面
-        return render(request,'login.html')
+
+        #实例化验证码表单
+        login_form = DynamicLoginForm()
+
+        #否则跳转到登陆页面  并且传递验证码给登录页面
+        return render(request,'login.html',{
+            "login_form":login_form
+        })
 
     def post(self,request,*args,**kwargs):
         #实例化表单
