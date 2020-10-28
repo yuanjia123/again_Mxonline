@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic.base import View
 
 #数据库查询   以及cook的设置，登录完成以后存在login当中
-from django.contrib.auth import authenticate,login
+from django.contrib.auth import authenticate,login,logout
 #跳转
 from django.http import HttpResponseRedirect
 #跳转
@@ -10,9 +10,21 @@ from django.urls import reverse
 
 from apps.users.forms import LoginForm
 
+#编写退出接口
+class LogoutView(View):
+    def get(self,request,*args,**kwargs):
+        #退出登录、清空cook
+        logout(request)
+        #跳转到主页
+        return HttpResponseRedirect(reverse("index"))
+
 # Create your views here.
 class LoginView(View):
     def get(self,request,*args,**kwargs):
+        #在index.html页面里面27行 有判断是否登录 如果登录直接跳转到首页
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse("index"))
+        #否则跳转到登陆页面
         return render(request,'login.html')
 
     def post(self,request,*args,**kwargs):
