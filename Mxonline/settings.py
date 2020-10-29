@@ -135,3 +135,8 @@ STATICFILES_DIRS = [
     #"D:\django框架\message_third\static"
     os.path.join(BASE_DIR, 'static')
 ]
+
+
+#云片网相关设置
+yp_apikey = '92201394a24e2e320e7922eeaa76e498'
+

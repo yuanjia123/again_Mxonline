@@ -4,12 +4,49 @@ from django.views.generic.base import View
 #数据库查询   以及cook的设置，登录完成以后存在login当中
 from django.contrib.auth import authenticate,login,logout
 #跳转
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,JsonResponse
 #跳转
 from django.urls import reverse
 
+#验证码、和表单
 from apps.users.forms import LoginForm,DynamicLoginForm
+#生成随机数的
+from apps.utils.random_str import generate_random
+#发送验证码的工具
+from apps.utils.YunPian import send_single_sms
 
+from Mxonline.settings import yp_apikey
+
+class SendSmsView(View):
+    def post(self,request,*args,**kwargs):
+        # 实例化验证码表单
+        send_sms_form = DynamicLoginForm(request.POST)
+        re_dict = {}
+        if send_sms_form.is_valid():
+            #当验证通过、1、会自动完成用户的验证码验证
+
+            #2、提取手机号
+            mobile = send_sms_form.cleaned_data['mobile']
+
+            #3、随机数验证码
+            code = generate_random(4,0)
+            #发送数据
+            re_json = send_single_sms(yp_apikey,code,mobile = mobile)
+            #如果是200发送成功
+            if re_json['code'] == 0:
+                #修改字典的值
+                re_dict["status"] = "success"
+            else:
+                #否则变成msg
+                re_dict["msg"] = re_json["msg"]
+
+
+
+        else:
+            for key,value in send_sms_form.errors.items():
+                re_dict[key] = value[0]
+
+        return JsonResponse(re_dict)
 #编写退出接口
 class LogoutView(View):
     def get(self,request,*args,**kwargs):

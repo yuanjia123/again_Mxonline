@@ -9,3 +9,5 @@ class LoginForm(forms.Form):
 
 class DynamicLoginForm(forms.Form):
     captcha = CaptchaField()
+    # 手机号
+    mobile = forms.CharField(required=True,min_length=11,max_length=11)

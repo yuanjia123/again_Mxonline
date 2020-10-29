@@ -4,7 +4,10 @@ from django.conf.urls import url,include
 
 import xadmin
 from django.views.generic import TemplateView
-from apps.users.views import LoginView,LogoutView
+from apps.users.views import LoginView,LogoutView,SendSmsView
+
+#取出csrf_token的工具
+from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -13,7 +16,8 @@ urlpatterns = [
     path('login/', LoginView.as_view(),name = "login"),  #其别名
 
     path('logout/', LogoutView.as_view(),name = "logout"),  #其别名
-    url(r'captcha/',include('captcha.urls')), #图片验证码
+    url(r'^captcha/',include('captcha.urls')), #图片验证码
+    url(r'^send_sms/',csrf_exempt(SendSmsView.as_view()),name="send_sms"), #接受验证码的 接口
 
 
 
