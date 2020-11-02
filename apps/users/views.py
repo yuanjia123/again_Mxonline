@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect,JsonResponse
 from django.urls import reverse
 
 #验证码、和表单
-from apps.users.forms import LoginForm,DynamicLoginForm
+from apps.users.forms import LoginForm,DynamicLoginForm,DynamicLoginPostForm
 #生成随机数的
 from apps.utils.random_str import generate_random
 #发送验证码的工具
@@ -18,8 +18,59 @@ from apps.utils.YunPian import send_single_sms
 #云片使用的apikey
 from Mxonline.settings import yp_apikey,REDIS_HOST,REDIS_PORT
 import redis
+from apps.users.models import UserProfile
+
+
+class DynamicLoginView(View):
+    '''
+    短信验证码的  登录验证
+    '''
+    def post(self,request,*args,**kwargs):
+        login_form = DynamicLoginPostForm(request.POST)
+        if login_form.is_valid():
+            # 没有账号可以登录
+            # 2、提取手机号
+            mobile = login_form.cleaned_data['mobile']
+
+            #提取手机号
+            existed_users = UserProfile.objects.filter(mobile=mobile)
+            #如果手机号存在（用户存在）
+            if existed_users:
+                #把手机号给 login记录一下
+                user = existed_users[0]
+
+            #如果手机号不存在 （用户不保存在）
+            else:
+                #添加用户
+                user = UserProfile(username=mobile)
+                #添加用户名字
+                user.password = user
+
+                #添加随机密码
+                # 3、随机数验证码
+                password = generate_random(10, 2)
+                user.set_password(password)
+                #保存新用户的手机号
+                user.mobile = mobile
+                #保存密码
+                user.save()
+            #保存用户的信息
+            login(request, user)
+            # 跳转到主页
+            return HttpResponseRedirect(reverse("index"))
+
+
+
+
+        else:
+            return render(request, "login.html", {"login_form": login_form})
+
 
 class SendSmsView(View):
+
+    '''
+    发送验证码
+    '''
     def post(self,request,*args,**kwargs):
         # 实例化验证码表单
         send_sms_form = DynamicLoginForm(request.POST)

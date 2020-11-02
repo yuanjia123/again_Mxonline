@@ -11,4 +11,4 @@ r = redis.Redis(host='localhost', port=6379, db=0,charset='utf8',decode_response
 import time
 # time.sleep(1)
 #打印值
-print(r.get("18082539819"))
+print(r.get("13772076699"))
