@@ -10,7 +10,7 @@ from apps.users.views import LoginView,LogoutView,SendSmsView,DynamicLoginView
 from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
+    # path('admin /', admin.site.urls),
     path('xadmin/', xadmin.site.urls),
     path('', TemplateView.as_view(template_name="index.html"),name='index'),
     path('login/', LoginView.as_view(),name = "login"),  #其别名

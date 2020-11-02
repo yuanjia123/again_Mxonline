@@ -23,7 +23,7 @@ from apps.users.models import UserProfile
 
 class DynamicLoginView(View):
     '''
-    短信验证码的  登录验证
+    短信验证码的    登录验证
     '''
     def post(self,request,*args,**kwargs):
         login_form = DynamicLoginPostForm(request.POST)
