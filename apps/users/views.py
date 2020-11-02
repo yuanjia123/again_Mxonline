@@ -15,7 +15,9 @@ from apps.utils.random_str import generate_random
 #发送验证码的工具
 from apps.utils.YunPian import send_single_sms
 
-from Mxonline.settings import yp_apikey
+#云片使用的apikey
+from Mxonline.settings import yp_apikey,REDIS_HOST,REDIS_PORT
+import redis
 
 class SendSmsView(View):
     def post(self,request,*args,**kwargs):
@@ -36,6 +38,14 @@ class SendSmsView(View):
             if re_json['code'] == 0:
                 #修改字典的值
                 re_dict["status"] = "success"
+                r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0, charset='utf8', decode_responses=True)
+
+                # 设置值
+                r.set(str(mobile), code)
+
+                # 持久化  (设置验证码5分钟过期)
+                r.expire(str(mobile), 300)
+
             else:
                 #否则变成msg
                 re_dict["msg"] = re_json["msg"]

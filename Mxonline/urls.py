@@ -6,7 +6,7 @@ import xadmin
 from django.views.generic import TemplateView
 from apps.users.views import LoginView,LogoutView,SendSmsView
 
-#取出csrf_token的工具
+#取消csrf_token的工具
 from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
