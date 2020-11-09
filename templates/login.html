@@ -105,7 +105,7 @@
                 <form class="tab-form {% if dynamic_login %}{% else %}hide{% endif %}" id="mobile_register_form" autocomplete="off" method="post" id="form2" action="{% url 'd_login'%}">
 
                     <div class="form-group marb20">
-                        <input id="jsRegMobile" name="mobile"  type="text" placeholder="请输入您的手机号码">
+                        <input id="jsRegMobile" name="mobile"  type="text" value="{{ login_form.mobile.value|default_if_none:'' }}" placeholder="请输入您的手机号码">
                     </div>
                     <div class="form-group marb20 blur" id="jsRefreshCode">
 {#                        动态验证码#}
@@ -113,11 +113,26 @@
                     </div>
                     <div class="clearfix">
                         <div class="form-group marb8 verify-code">
-                            <input id="jsPhoneRegCaptcha" name="code" type="text" placeholder="输入手机验证码">
+{#                                                                                  回填 |default_if_none:'' 如果没有值传递过来则填一个空的 #}
+                            <input id="jsPhoneRegCaptcha" name="code" type="text" value="{{ login_form.code.value|default_if_none:'' }}" placeholder="输入手机验证码">
                         </div>
                         <input class="verify-code-btn sendcode" id="jsSendCode" value="发送验证码">
                     </div>
-                    <div class="error btns" id="jsMobileTips" style="display: none;"></div>
+
+                    <div class="error btns" id="jsMobileTips" style="">
+                        {#                        如果传递过来的login_form.error里面有值。说明验证不通过#}
+                        {% if login_form.errors %}
+                            {% for key,error in login_form.errors.items %}
+                                {{ error }}
+                            {% endfor %}
+{#                       否则验证通过、（验证通过值得是1、账号和密码都有值 且最小值大于3）    #}
+                        {% else %}
+{#                            进入到密码验证才会显示这个、账号或者密码输入错误#}
+                            {{ msg }}
+                        {% endif %}
+                        {{ msg }}
+                    </div>
+
                     <div class="auto-box marb8">
                     </div>
                     <input class="btn btn-green" id="jsMobileRegBtn" type="button" value="立即登录">
