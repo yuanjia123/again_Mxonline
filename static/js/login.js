@@ -67,6 +67,7 @@ $(function() {
         dots: true,
         fluid: false
     });
+
     var unslider = $('.imgslide').unslider();
     $('.unslider-arrow').click(function() {
         var fn = this.className.split(' ')[1];
@@ -113,7 +114,7 @@ $(function() {
             );
         if(!verify){
             return;
-        }
+        }jsLoginBtn
         $.ajax({
             cache: false,
             type: 'post',

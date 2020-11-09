@@ -20,15 +20,17 @@ from Mxonline.settings import yp_apikey,REDIS_HOST,REDIS_PORT
 import redis
 from apps.users.models import UserProfile
 
-
+#短信验证码的    登录验证
 class DynamicLoginView(View):
     '''
     短信验证码的    登录验证
     '''
     def post(self,request,*args,**kwargs):
         login_form = DynamicLoginPostForm(request.POST)
+
+        #如果短信验证码、验证成功
         if login_form.is_valid():
-            # 没有账号可以登录
+            # 没有账号可以登录  思路：先判断用户是否存在、如果存在 ...如果不存在先注册、给随机密码在登录、看以后代码
             # 2、提取手机号
             mobile = login_form.cleaned_data['mobile']
 
@@ -47,7 +49,7 @@ class DynamicLoginView(View):
                 user.password = user
 
                 #添加随机密码
-                # 3、随机数验证码
+                # 3、生成随机数验证码、不怕爬虫去伪造
                 password = generate_random(10, 2)
                 user.set_password(password)
                 #保存新用户的手机号
@@ -60,14 +62,12 @@ class DynamicLoginView(View):
             return HttpResponseRedirect(reverse("index"))
 
 
-
-
         else:
+            #如果短信验证码验证失败、
             return render(request, "login.html", {"login_form": login_form})
 
-
+#发送验证码
 class SendSmsView(View):
-
     '''
     发送验证码
     '''
@@ -83,7 +83,8 @@ class SendSmsView(View):
 
             #3、随机数验证码
             code = generate_random(4,0)
-            #发送数据
+
+            #发送短信验证码
             re_json = send_single_sms(yp_apikey,code,mobile = mobile)
             #如果是200发送成功
             if re_json['code'] == 0:
@@ -108,6 +109,7 @@ class SendSmsView(View):
                 re_dict[key] = value[0]
 
         return JsonResponse(re_dict)
+
 #编写退出接口
 class LogoutView(View):
     def get(self,request,*args,**kwargs):
@@ -138,7 +140,7 @@ class LoginView(View):
         #表单验证可以说是 输入框验证、1、验证是否有值、2、验证输入的值是否大于 3
         #表单验证如果验证通过就会进入 账号、密码逻辑
         if login_form.is_valid():
-            #这个里面的值/清洗以后的值
+            #取出这个里面的值/清洗以后的值
             user_name = login_form.cleaned_data["username"]
             password = login_form.cleaned_data["password"]
 
@@ -147,7 +149,7 @@ class LoginView(View):
             if user is not None:
                 # 如果登录成功、记录登录信息     调用login以后、就是一种登录的状态
                 login(request, user)
-                # 跳转到主页
+                # 跳转到主页   index  就是  主页name属性修改后的属性
                 return HttpResponseRedirect(reverse('index'))
             #如果账号或者密码验证错误、则传递msg  和 login_form到这个里面
             else:
@@ -171,5 +173,3 @@ class LoginView(View):
         #     return render(request, "login.html", {"msg": "密码格式不正确"})
 
         #****思考如何简化 表单验证、如何更简单的使用表单验证
-
-
