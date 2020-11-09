@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect,JsonResponse
 from django.urls import reverse
 
 #验证码、和表单
-from apps.users.forms import LoginForm,DynamicLoginForm,DynamicLoginPostForm
+from apps.users.forms import LoginForm,DynamicLoginForm,DynamicLoginPostForm,RegisterPostForm,RegisterGetForm
 #生成随机数的
 from apps.utils.random_str import generate_random
 #发送验证码的工具
@@ -19,6 +19,51 @@ from apps.utils.YunPian import send_single_sms
 from Mxonline.settings import yp_apikey,REDIS_HOST,REDIS_PORT
 import redis
 from apps.users.models import UserProfile
+
+
+class RegisterView(View):
+    def get(self,request,*args,**kwargs):
+        register_get_form = RegisterGetForm()
+        return render(request,'register.html',{
+            "register_get_form":register_get_form
+        })
+
+    def post(self,request,*args,**kwargs):
+        #form表单实例化的时候、如果是post请求、需要加上request.POST
+        register_post_form = RegisterPostForm(request.POST)
+
+        #如果验证成功、则说明手机号是新的、验证码也和redis当中的一样
+        if register_post_form.is_valid():
+            mobile = register_post_form.cleaned_data["mobile"]
+            password = register_post_form.cleaned_data["password"]
+
+
+            print("验证成功以后会打印这句话")
+
+            #手机号是用户名
+            user = UserProfile(username = mobile)
+
+            #设置密码  加密的形式
+            user.set_password(password)
+            #手机号是手机号
+            user.mobile = mobile
+            #保存
+            user.save()
+            #记录登录
+            login(request,user)
+
+            #跳转到首页
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            #重新分配验证码
+            register_get_form = RegisterGetForm()
+            return render(request,"register.html",{
+                "register_get_form":register_get_form,
+                "register_post_form":register_post_form
+            })
+
+
+
 
 #短信验证码的    登录验证
 class DynamicLoginView(View):

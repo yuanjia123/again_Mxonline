@@ -4,7 +4,7 @@ from django.conf.urls import url,include
 
 import xadmin
 from django.views.generic import TemplateView
-from apps.users.views import LoginView,LogoutView,SendSmsView,DynamicLoginView
+from apps.users.views import LoginView,LogoutView,SendSmsView,DynamicLoginView,RegisterView
 
 #取消csrf_token的工具
 from django.views.decorators.csrf import csrf_exempt
@@ -16,6 +16,11 @@ urlpatterns = [
 
     #登录的视图
     path('login/', LoginView.as_view(),name = "login"),  #其别名
+
+
+    #注册
+    path('register/', RegisterView.as_view(),name = "register"),  #其别名
+
     # 退出登录
     path('logout/', LogoutView.as_view(), name="logout"),  # name其别名
 
