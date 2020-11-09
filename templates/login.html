@@ -71,7 +71,8 @@
                     <h2 class="{% if dynamic_login %}{% else %}active{% endif %}">账号登录</h2>
                     <h2 class="{% if dynamic_login %}active{% else %}{% endif %}">动态登录</h2>
                 </div>
-
+{#                class="tab-form hide"   代表的是css隐藏标签#}
+                {#                如果dynamic_login是Ture则显示hide  意思是隐藏账号登录#}
                 <form class="tab-form {% if dynamic_login %}hide{% else %}{% endif %}" action="{% url 'login' %}" method="post" autocomplete="off" id="form1">
                     {% csrf_token %}
                     {#                    class="form-group marb8 errorput"  输入框会变成红色，是一种样式   下面这样写如果验证不通过 输入框爆红#}
@@ -102,13 +103,16 @@
                      <input class="btn btn-green" id="jsLoginBtn" type="submit" value="立即登录 > " />
                 </form>
 
+                {#                如果dynamic_login是False则显示hide  意思是隐藏账号登录#}
                 <form class="tab-form {% if dynamic_login %}{% else %}hide{% endif %}" id="mobile_register_form" autocomplete="off" method="post" id="form2" action="{% url 'd_login'%}">
 
                     <div class="form-group marb20">
+
+{#                        value="{{ login_form.mobile.value|default_if_none:'' }}"  的意思是：在文本框中显示先前输入的手机号、如果之前没有输入则显示空#}
                         <input id="jsRegMobile" name="mobile"  type="text" value="{{ login_form.mobile.value|default_if_none:'' }}" placeholder="请输入您的手机号码">
                     </div>
                     <div class="form-group marb20 blur" id="jsRefreshCode">
-{#                        动态验证码#}
+{#                        从主页跳转到登录页面的    动态验证码 #}
                         {{ login_form.captcha }}
 {#                        动态短信  登录失败后传递过来的短信验证码图片#}
                         {{ d_form.captcha }}
@@ -122,7 +126,7 @@
                     </div>
 
                     <div class="error btns" id="jsMobileTips" style="">
-                        {#                        如果传递过来的login_form.error里面有值。说明验证不通过#}
+                        {#     表单验证失败                   如果传递过来的login_form.error里面有值。说明验证不通过#}
                         {% if login_form.errors %}
                             {% for key,error in login_form.errors.items %}
                                 {{ error }}

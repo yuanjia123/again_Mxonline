@@ -27,7 +27,10 @@ class DynamicLoginView(View):
     '''
     def post(self,request,*args,**kwargs):
         login_form = DynamicLoginPostForm(request.POST)
+
+        #设置一个变量、登录报错以后、让页面还停留在动态短信登陆页面
         dynamic_login = True
+
         #如果短信验证码、验证成功
         if login_form.is_valid():
             # 没有账号可以登录  思路：先判断用户是否存在、如果存在 ...如果不存在先注册、给随机密码在登录、看以后代码
