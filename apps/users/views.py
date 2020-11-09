@@ -55,10 +55,11 @@ class RegisterView(View):
             #跳转到首页
             return HttpResponseRedirect(reverse("index"))
         else:
-            #重新分配验证码
+            #如果验证失败的话  重新分配图片验证码到 register_get_form表单
             register_get_form = RegisterGetForm()
             return render(request,"register.html",{
                 "register_get_form":register_get_form,
+                #这个里面有错误信息、传递过去显示出来
                 "register_post_form":register_post_form
             })
 

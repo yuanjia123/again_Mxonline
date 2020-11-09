@@ -85,7 +85,7 @@
                 </div>
                 <div class="tab-form">
                     <form id="mobile_register_form" method="post" action="{% url 'register' %}" autocomplete="off">
-
+{#                             如果 register_post_form.errors.mobile有错误则 显示errorput#}
                         <div class="form-group marb20 {% if register_post_form.errors.mobile %}errorput{% endif %}">
                             <input id="jsRegMobile" name="mobile" type="text" placeholder="请输入您的手机号码">
                         </div>
