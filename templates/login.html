@@ -67,11 +67,12 @@
             </div>
             <div class="fl form-box">
                 <div class="tab">
-                    <h2 class="active">账号登录</h2>
-                    <h2 >动态登录</h2>
+{#                    如果dynamic_login是Ture则显示空、否则显示active#}
+                    <h2 class="{% if dynamic_login %}{% else %}active{% endif %}">账号登录</h2>
+                    <h2 class="{% if dynamic_login %}active{% else %}{% endif %}">动态登录</h2>
                 </div>
 
-                <form class="tab-form" action="{% url 'login' %}" method="post" autocomplete="off" id="form1">
+                <form class="tab-form {% if dynamic_login %}hide{% else %}{% endif %}" action="{% url 'login' %}" method="post" autocomplete="off" id="form1">
                     {% csrf_token %}
                     {#                    class="form-group marb8 errorput"  输入框会变成红色，是一种样式   下面这样写如果验证不通过 输入框爆红#}
                     <div class="form-group marb20 {% if login_form.errors.username %}errorput{% endif %}">
@@ -101,7 +102,7 @@
                      <input class="btn btn-green" id="jsLoginBtn" type="submit" value="立即登录 > " />
                 </form>
 
-                <form class="tab-form hide" id="mobile_register_form" autocomplete="off" method="post" id="form2" action="{% url 'd_login'%}">
+                <form class="tab-form {% if dynamic_login %}{% else %}hide{% endif %}" id="mobile_register_form" autocomplete="off" method="post" id="form2" action="{% url 'd_login'%}">
 
                     <div class="form-group marb20">
                         <input id="jsRegMobile" name="mobile"  type="text" placeholder="请输入您的手机号码">

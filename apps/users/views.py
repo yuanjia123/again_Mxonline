@@ -27,7 +27,7 @@ class DynamicLoginView(View):
     '''
     def post(self,request,*args,**kwargs):
         login_form = DynamicLoginPostForm(request.POST)
-
+        dynamic_login = True
         #如果短信验证码、验证成功
         if login_form.is_valid():
             # 没有账号可以登录  思路：先判断用户是否存在、如果存在 ...如果不存在先注册、给随机密码在登录、看以后代码
@@ -63,8 +63,9 @@ class DynamicLoginView(View):
 
 
         else:
-            #如果短信验证码验证失败、
-            return render(request, "login.html", {"login_form": login_form})
+            #如果短信验证码验证失败、会接受DynamicLoginPostForm 类的验证错误
+            return render(request, "login.html", {"login_form": login_form,
+                                                  "dynamic_login":dynamic_login})
 
 #发送验证码
 class SendSmsView(View):
