@@ -63,9 +63,14 @@ class DynamicLoginView(View):
 
 
         else:
+            #传递这个图片验证码的、表单是因为：如果短信验证码登录报错、重新实例化 验证码对象、传递到前端登陆页面、就不用刷新登陆页面
+            d_form = DynamicLoginForm()
+
+
             #如果短信验证码验证失败、会接受DynamicLoginPostForm 类的验证错误
             return render(request, "login.html", {"login_form": login_form,
-                                                  "dynamic_login":dynamic_login})
+                                                  "dynamic_login":dynamic_login,
+                                                  'd_form':d_form})
 
 #发送验证码
 class SendSmsView(View):

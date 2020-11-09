@@ -110,6 +110,8 @@
                     <div class="form-group marb20 blur" id="jsRefreshCode">
 {#                        动态验证码#}
                         {{ login_form.captcha }}
+{#                        动态短信  登录失败后传递过来的短信验证码图片#}
+                        {{ d_form.captcha }}
                     </div>
                     <div class="clearfix">
                         <div class="form-group marb8 verify-code">
