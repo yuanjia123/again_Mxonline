@@ -71,6 +71,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media'
             ],
         },
     },
@@ -142,3 +143,7 @@ yp_apikey = '92201394a24e2e320e7922eeaa76e498'
 
 REDIS_HOST = "127.0.0.1"
 REDIS_PORT = 6379
+
+#把图片文件放到这个media文件夹下面
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR,"media")

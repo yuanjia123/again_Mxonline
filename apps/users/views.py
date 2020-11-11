@@ -173,6 +173,8 @@ class LogoutView(View):
         #跳转到主页
         return HttpResponseRedirect(reverse("index"))
 
+
+
 # Create your views here.
 class LoginView(View):
     def get(self,request,*args,**kwargs):

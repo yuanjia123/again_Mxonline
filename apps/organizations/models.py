@@ -22,6 +22,8 @@ class CourseOrg(BaseModel):
                                 choices=(("pxjg", "培训机构"), ("gr", "个人"), ("gx", "高校")))
     click_nums = models.IntegerField(default=0, verbose_name="点击数")
     fav_nums = models.IntegerField(default=0, verbose_name="收藏数")
+
+    #在Mxonline的文件架下面会产生一个org的文件夹、这里存放img
     image = models.ImageField(upload_to="org/%Y/%m", verbose_name="logo", max_length=100)
     address = models.CharField(max_length=150, verbose_name="机构地址")
     students = models.IntegerField(default=0, verbose_name="学习人数")
