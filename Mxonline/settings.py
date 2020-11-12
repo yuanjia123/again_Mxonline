@@ -71,6 +71,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                #这个是类似于flask上下文处理器的东西
                 'django.template.context_processors.media'
             ],
         },

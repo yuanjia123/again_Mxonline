@@ -49,7 +49,7 @@ urlpatterns = [
     #配置上传文件   文件访问url           MEDIA_ROOT文件的根目录
     url(r'^media/(?P<path>.*)$',serve,{"document_root":MEDIA_ROOT}),
 
-    # 课程页面
+    # 课程机构
     url(r'^org_list/',OrgaView.as_view(), name = 'org_list'),
 
 
