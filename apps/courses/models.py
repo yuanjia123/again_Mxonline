@@ -49,6 +49,9 @@ class Course(BaseModel):
 
 
 class Lesson(BaseModel):
+    '''
+    章节表
+    '''
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="课程")  #on_delete表示对应的外键数据被删除后，当前的数据应该怎么办
     name = models.CharField(max_length=100, verbose_name="章节名")
     learn_times = models.IntegerField(default=0, verbose_name="学习时长(分钟数)")

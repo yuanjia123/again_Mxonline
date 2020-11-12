@@ -41,10 +41,20 @@ class CourseOrg(BaseModel):
         通过这个方法， 可以直接找到当前的机构、有哪些课程
         :return:
         '''
+
+
+        #方式一
         #拿到课程表、  避免环形调用
-        from apps.courses.models import Course
-        #拿到当前机构所对应的课程
-        courses = Course.objects.filter(course_org=self)
+        #from apps.courses.models import Course
+        #拿到当前机构所对应的课程      self是当前类的实例
+        #courses = Course.objects.filter(course_org=self)
+        #return courses
+
+        #方式二 通过model反向取外键关联数据
+        '''
+        如果当前的model（机构）是另外一个表(课程)的外键 通过关联表的表名小写_set.all()就能拿到当前机构的课程数据
+        '''
+        courses = self.course_set.all()
         return courses
 
     def __str__(self):

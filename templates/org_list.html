@@ -90,7 +90,7 @@
                             <li class="c8" style="padding-left:18px;">{{ org.address }}</li>
                             <li class="pic10" style="padding-left:18px;">经典课程：
 
-{#                                    显示机构有哪些课程、   org是每一个机构、#}
+{#                                    显示机构有哪些课程、   org是每一个机构、courses:是课程机构表的方法，用来寻找这个机构有哪些课程 #}
                                     {% for course in org.courses %}
                                         <a href="#">{{ course.name }}</a>
                                     {% endfor %}
