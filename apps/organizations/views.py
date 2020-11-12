@@ -14,6 +14,8 @@ class OrgaView(View):
 
         #查询所有的城市
         all_citys = City.objects.all()
+
+        #
         return render(request, 'org_list.html',{
             #传递数据到  课程机构的页面
             "all_orgs":all_orgs,

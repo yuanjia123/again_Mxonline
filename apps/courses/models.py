@@ -19,7 +19,10 @@ from apps.organizations.models import CourseOrg
 
 
 class Course(BaseModel):
+    #外键这个课程属于哪个老师
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, verbose_name="讲师")
+
+    #这个课程属于哪个机构  增加字段、课程是哪个机构的、这样会引起字段冗余、但是这样查询起来比较快、也是数据库调优的一种方式
     course_org = models.ForeignKey(CourseOrg, null=True, blank=True, on_delete=models.CASCADE, verbose_name="课程机构")
 
     name = models.CharField(verbose_name="课程名", max_length=50)

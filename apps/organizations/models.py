@@ -15,6 +15,9 @@ class City(BaseModel):
         return self.name
 
 class CourseOrg(BaseModel):
+    '''
+    机构表和课程表有关联关系、每个机构有自己的课程
+    '''
     name = models.CharField(max_length=50, verbose_name="机构名称")
     desc = models.TextField(verbose_name="描述")
     tag = models.CharField(default="全国知名", max_length=10, verbose_name="机构标签")
@@ -29,11 +32,20 @@ class CourseOrg(BaseModel):
     address = models.CharField(max_length=150, verbose_name="机构地址")
     students = models.IntegerField(default=0, verbose_name="学习人数")
     course_nums = models.IntegerField(default=0, verbose_name="课程数")
-
-    # is_auth = models.BooleanField(default=False, verbose_name="是否认证")
-    # is_gold = models.BooleanField(default=False, verbose_name="是否金牌")
-
+    is_auth = models.BooleanField(default=False, verbose_name="是否认证")
+    is_gold = models.BooleanField(default=False, verbose_name="是否金牌")
     city = models.ForeignKey(City, on_delete=models.CASCADE, verbose_name="所在城市")
+
+    def courses(self):
+        '''
+        通过这个方法， 可以直接找到当前的机构、有哪些课程
+        :return:
+        '''
+        #拿到课程表
+        from apps.courses.models import Course
+        #拿到当前机构所对应的课程
+        courses = Course.objects.filter(course_org=self)
+        return courses
 
     def __str__(self):
         return self.name

@@ -73,11 +73,15 @@
                              <a href="org-detail-homepage.html">
                                  <h1>{{ org.name }}</h1>
                                  <div class="pic fl">
-
+{#                                        判断是否是认证的#}
+                                        {% if org.is_auth %}
                                           <img src="{% static 'images/authentication.png' %}"/>
+                                        {% endif %}
 
+{#                                        判断是否是金牌#}
+                                        {% if org.is_gold %}
                                           <img src="{% static 'images/gold.png' %}"/>
-
+                                        {% endif %}
                                  </div>
                              </a>
                         </div>
@@ -86,9 +90,13 @@
                             <li class="c8" style="padding-left:18px;">{{ org.address }}</li>
                             <li class="pic10" style="padding-left:18px;">经典课程：
 
-                                    <a href="/diary/19/">c语言基础入门</a>
-
-                                    <a href="/diary/16/">数据库基础</a>
+{#                                    显示机构有哪些课程、   org是每一个机构、#}
+                                    {% for course in org.courses %}
+                                        <a href="#">{{ course.name }}</a>
+                                    {% endfor %}
+{#                                    <a href="/diary/19/">c语言基础入门</a>#}
+{##}
+{#                                    <a href="/diary/16/">数据库基础</a>#}
 
                             </li>
                         </ul>
