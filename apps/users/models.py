@@ -8,6 +8,7 @@ GENDER_CHOICES = (
 )
 
 class BaseModel(models.Model):
+    #给每张表创建添加时间字段
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
     class Meta:

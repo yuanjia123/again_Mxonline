@@ -41,7 +41,7 @@ class CourseOrg(BaseModel):
         通过这个方法， 可以直接找到当前的机构、有哪些课程
         :return:
         '''
-        #拿到课程表
+        #拿到课程表、  避免环形调用
         from apps.courses.models import Course
         #拿到当前机构所对应的课程
         courses = Course.objects.filter(course_org=self)
