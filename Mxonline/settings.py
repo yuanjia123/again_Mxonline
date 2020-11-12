@@ -68,10 +68,12 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
+
+                #request.user.is_authenticated  这个主页里面、判断是否登录的上下文处理器、在任何模板页面当中都可以进行访问、（类似于flask）
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                #这个是类似于flask上下文处理器的东西
+                #这个是类似于flask上下文处理器的东西(把media的路径传递到每个模板 )  按住ctrl点击 'django.template.context_processors.media'的media里面会返回一个settings.MEDIA_URL
                 'django.template.context_processors.media'
             ],
         },
@@ -145,6 +147,7 @@ yp_apikey = '92201394a24e2e320e7922eeaa76e498'
 REDIS_HOST = "127.0.0.1"
 REDIS_PORT = 6379
 
-#把图片文件放到这个media文件夹下面
+#把上传文件访问的Url前面都应该加上 这个/media/
 MEDIA_URL = "/media/"
+#上传的文件应该放在哪个文件下面
 MEDIA_ROOT = os.path.join(BASE_DIR,"media")

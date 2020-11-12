@@ -60,10 +60,11 @@
 			</div>
 
             {% for org in all_orgs %}
+{#                这里都是存放课程机构的标签   只需要遍历这些标签#}
                 <dl class="des difdes">
                     <dt>
                         <a href="org-detail-homepage.html">
-{#                            {{ MEDIA_URL }}{{ org.image }} 这个是上传照片的路径   访问的照片#}
+{#                            {{ MEDIA_URL }}{{ org.image }} 这个是上传照片的路径访问url  其中MEDIA_URL，是上下文处理器可以再setting当中的'django.template.context_processors.media'中查看#}
                             <img width="200" height="120" class="scrollLoading" data-url="{{ MEDIA_URL }}{{ org.image }}"/>
                         </a>
                     </dt>

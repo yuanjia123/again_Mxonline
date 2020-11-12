@@ -133,13 +133,13 @@ class SendSmsView(View):
         if send_sms_form.is_valid():
             #当验证通过、1、会自动完成用户的验证码验证
 
-            #2、提取手机号
+            #2、提取手机号    ajax只是给send_sms地址发送了手机号、和验证码、133行验证了图形验证码并通过、137行提取了手机号、
             mobile = send_sms_form.cleaned_data['mobile']
 
             #3、随机数验证码
             code = generate_random(4,0)
 
-            #发送短信验证码
+            #发送短信验证码给137行传过来的手机号
             re_json = send_single_sms(yp_apikey,code,mobile = mobile)
             #如果是200发送成功
             if re_json['code'] == 0:
@@ -182,7 +182,7 @@ class LoginView(View):
         if request.user.is_authenticated:
             return HttpResponseRedirect(reverse("index"))
 
-        #实例化验证码表单
+        #实例化图片验证码表单
         login_form = DynamicLoginForm()
 
         #否则跳转到登陆页面  并且传递验证码给登录页面

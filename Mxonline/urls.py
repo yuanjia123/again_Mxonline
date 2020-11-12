@@ -8,6 +8,8 @@ from apps.users.views import LoginView,LogoutView,SendSmsView,DynamicLoginView,R
 from apps.organizations.views import OrgaView
 #取消csrf_token的工具
 from django.views.decorators.csrf import csrf_exempt
+
+#关于静态文件图片的访问
 from django.views.static import serve
 
 #配置上传文件的路径
@@ -25,7 +27,7 @@ urlpatterns = [
 
 
 
-    #登录的视图
+    #账号登录的视图
     path('login/', LoginView.as_view(),name = "login"),  #其别名
 
 
@@ -46,8 +48,13 @@ urlpatterns = [
     path('d_login/', csrf_exempt(DynamicLoginView.as_view()), name="d_login"),
 
 
-    #配置上传文件   文件访问url           MEDIA_ROOT文件的根目录
+    #1、为了整理、上传的图片、我们把所有的上传文件放到media文件夹下面、并且为它创建url访问地址   在setting当中设置两行 151行 152行
+    #2、设置了setting之后、依然是一个破图、显示不了
+    #3、配置关于media中图片的访问
+    #4、r'^media/(?P<path>.*)$' 的意思是取出media文件夹后面的文件把他放到path这个路径当中,
+    #5、server 静态文件的访问url 地址， 这个地址是key:value的形式存储在 Media_root路径下面
     url(r'^media/(?P<path>.*)$',serve,{"document_root":MEDIA_ROOT}),
+
 
     # 课程机构
     url(r'^org_list/',OrgaView.as_view(), name = 'org_list'),
