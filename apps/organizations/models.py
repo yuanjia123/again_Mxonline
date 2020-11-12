@@ -54,7 +54,11 @@ class CourseOrg(BaseModel):
         '''
         如果当前的model（机构）是另外一个表(课程)的外键 通过关联表的表名小写_set.all()就能拿到当前机构的课程数据
         '''
-        courses = self.course_set.all()
+        #查询当前机构所有的课程
+        # courses = self.course_set.all()
+
+        # 查询当前机构所有的经典课程、只显示前3个
+        courses = self.course_set.filter(is_classics=True)[:3]
         return courses
 
     def __str__(self):
