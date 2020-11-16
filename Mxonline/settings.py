@@ -34,7 +34,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'xadmin.apps.XAdminConfig',
      #验证码需要注册的app
-    'captcha'
+    'captcha',
+    'pure_pagination',
 ]
 
 #中间键
@@ -138,3 +139,11 @@ REDIS_PORT = 6379
 MEDIA_URL = "/media/"
 #上传的文件应该放在media文件下面
 MEDIA_ROOT = os.path.join(BASE_DIR,"media")
+
+#分页设置
+PAGINATION_SETTINGS = {
+    'PAGE_RANGE_DISPLAYED': 10,
+    'MARGIN_PAGES_DISPLAYED': 2,
+
+    'SHOW_FIRST_PAGE_WHEN_INVALID': True,
+}
