@@ -2,6 +2,7 @@
 
 import os
 #系统模块
+#8
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 #print("-----------------",BASE_DIR)   打印----------------- D:\django框架\Message\muke_web_django\Mxonline  项目的当前位置
