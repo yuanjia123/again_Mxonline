@@ -51,6 +51,8 @@ class CourseOrg(BaseModel):
         #return courses
 
         #方式二 通过model反向取外键关联数据
+
+
         '''
         如果当前的model（机构）是另外一个表(课程)的外键 通过关联表的表名小写_set.all()就能拿到当前机构的课程数据
         '''

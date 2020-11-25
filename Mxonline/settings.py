@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'xadmin.apps.XAdminConfig',
      #验证码需要注册的app
     'captcha',
+    #分页
     'pure_pagination',
 ]
 
