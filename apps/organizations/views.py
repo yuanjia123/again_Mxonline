@@ -13,22 +13,26 @@ class OrgaView(View):
     def get(self, request, *args, **kwargs):
         #从数据库中获取 课程机构 全部的数据
         all_orgs = CourseOrg.objects.all()
-        #查询多少家机构
-        org_nums = CourseOrg.objects.count()
 
         #查询所有的城市
         all_citys = City.objects.all()
+
+        #对机构进行分类  对应前端的get 传参ct = pxjg、ct = gx  、ct = gr等等
+        category =request.GET.get("ct","")
+        if category:
+            #对上面的机构进行二次查询
+            all_orgs = all_orgs.filter(category=category)
+        #分类完成以后在进行统计
+        # 查询多少家机构
+        org_nums = CourseOrg.objects.count()
 
         # 对课程机构数据进行分页
         try:
             page = request.GET.get('page', 1)
         except PageNotAnInteger:
             page = 1
-
-
         #对课程机构数据进行分页     per_page=5每页显示5条数据
-        p = Paginator(all_orgs,per_page=2, request=request)
-
+        p = Paginator(all_orgs,per_page=10, request=request)
         orgs = p.page(page)
 
         #
@@ -39,4 +43,5 @@ class OrgaView(View):
             # "MEDIA_URL":MEDIA_URL
             "org_nums":org_nums,
             'all_citys':all_citys,
+            'category':category
         })
