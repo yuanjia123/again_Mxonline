@@ -22,6 +22,15 @@ class OrgaView(View):
         if category:
             #对上面的机构进行二次查询
             all_orgs = all_orgs.filter(category=category)
+
+        #通过城市进行查找
+        #1、先拿到传过来的值
+        city_id = request.GET.get("city","")
+        if city_id:
+            #判断是否是数字类型
+            if city_id.isdigit():
+                all_orgs = all_orgs.filter(city_id=int(city_id))
+
         #分类完成以后在进行统计
         # 查询多少家机构
         org_nums = CourseOrg.objects.count()
@@ -43,5 +52,6 @@ class OrgaView(View):
             # "MEDIA_URL":MEDIA_URL
             "org_nums":org_nums,
             'all_citys':all_citys,
-            'category':category
+            'category':category,
+            'city_id':city_id
         })
