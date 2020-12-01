@@ -5,7 +5,7 @@ from django.conf.urls import url,include
 import xadmin
 from django.views.generic import TemplateView
 from apps.users.views import LoginView,LogoutView,SendSmsView,DynamicLoginView,RegisterView
-from apps.organizations.views import OrgaView
+from apps.organizations.views import OrgView
 #取消csrf_token的工具
 from django.views.decorators.csrf import csrf_exempt
 
@@ -57,7 +57,8 @@ urlpatterns = [
 
 
     # 课程机构
-    url(r'^org_list/',OrgaView.as_view(), name = 'org_list'),
+    # url(r'^org_list/',OrgView.as_view(), name = 'org_list'),
+    url(r'^org/',include(('apps.organizations.urls',"organizations"),namespace='org')),
 
 
 ]

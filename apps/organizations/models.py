@@ -4,6 +4,9 @@ from apps.users.models import BaseModel
 # Create your models here.
 
 class City(BaseModel):
+    '''
+    城市表
+    '''
     name = models.CharField(max_length=20, verbose_name=u"城市名")
     desc = models.CharField(max_length=200, verbose_name=u"描述")
 
@@ -16,6 +19,7 @@ class City(BaseModel):
 
 class CourseOrg(BaseModel):
     '''
+    机构表
     机构表和课程表有关联关系、每个机构有自己的课程
     '''
     name = models.CharField(max_length=50, verbose_name="机构名称")
@@ -71,6 +75,9 @@ class CourseOrg(BaseModel):
 
 from apps.users.models import UserProfile
 class Teacher(BaseModel):
+    '''
+    教师表
+    '''
     user = models.OneToOneField(UserProfile, on_delete=models.SET_NULL, null=True, blank=True,verbose_name="用户")
     org = models.ForeignKey(CourseOrg, on_delete=models.CASCADE, verbose_name="所属机构")
     name = models.CharField(max_length=50, verbose_name=u"教师名")

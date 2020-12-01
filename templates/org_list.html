@@ -54,9 +54,10 @@
 		<div class="layout">
 			<div class="head">
 				<ul class="tab_header">
-					<li class="active"><a href="?ct=&city=">全部</a> </li>
-					<li class=""><a href="?sort=students&ct=&city=">学习人数 &#8595;</a></li>
-					<li class=""><a href="?sort=courses&ct=&city=">课程数 &#8595;</a></li>
+					<li class="{% if sort == ''%}active{%endif%}"><a href="?ct=&city=">全部</a> </li>
+<!--                    为什么要写这些参数？  因为点击排序以后、筛选条件也不能乱-->
+					<li class="{%if sort == 'students'%}active{%endif%}"><a href="?sort=students&ct={{category}}&city={{city_id}}">学习人数 &#8595;</a></li>
+					<li class="{%if sort == 'courses'%}active{%endif%}"><a href="?sort=courses&ct={{category}}&city={{city_id}}">课程数 &#8595;</a></li>
 				</ul>
 			</div>
 
@@ -160,30 +161,16 @@
 		<div class="right companyrank layout">
 			<div class="head">授课机构排名</div>
 
-
-                <dl class="des">
-                    <dt class="num fl">1</dt>
+                {%for org in hot_orgs%}
+                    <dl class="des">
+<!--                        forloop.counter1 当前的for循环索引-->
+                    <dt class="num fl">{{forloop.counter1}}</dt>
                     <dd>
-                        <a href="/company/2/"><h1>慕课网</h1></a>
-                        <p>北京市</p>
+                        <a href="/company/2/"><h1>{{org.name}}</h1></a>
+                        <p>{{org.address}}</p>
                     </dd>
                 </dl>
-
-                <dl class="des">
-                    <dt class="num fl">2</dt>
-                    <dd>
-                        <a href="/company/2/"><h1>慕课网2</h1></a>
-                        <p>深圳市</p>
-                    </dd>
-                </dl>
-
-                <dl class="des">
-                    <dt class="num fl">3</dt>
-                    <dd>
-                        <a href="/company/2/"><h1>北京大学</h1></a>
-                        <p>北京市</p>
-                    </dd>
-                </dl>
+                {%endfor%}
 
 
 
