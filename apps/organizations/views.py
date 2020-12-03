@@ -6,6 +6,57 @@ from django.shortcuts import render_to_response
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from Mxonline.settings import MEDIA_URL
 
+from apps.organizations.forms import AddAskForm
+from django.http import JsonResponse
+
+
+class OrgHomeView(View):
+    '''
+    显示机构的详细页面
+    '''
+    def get(self, request, org_id, *args, **kwargs):
+        #查询
+        #course_org = CourseOrg.objects.filter(id=int(org_id))
+
+        # 直接传参到view视图  所以用get
+        course_org = CourseOrg.objects.get(id=int(org_id))
+        #给机构的点击数字段+1
+        course_org.click_nums += 1
+        course_org.save()
+
+        #显示三个课程
+        all_courses = course_org.course_set.all()[:3]
+        #显示一个老师
+        all_teacher = course_org.teacher_set.all()[:1]
+
+        return render(request,"org-detail-homepage.html",{
+            'all_courses':all_courses,
+            'all_teacher':all_teacher,
+            'course_org':course_org
+        })
+
+
+class AddAskView(View):
+    '''
+    处理用户处理视图
+    '''
+
+    def post(self, request, *args, **kwargs):
+        userask_form = AddAskForm(request.POST)
+        if userask_form.is_valid():
+            #验证通过以后直接保存在数据库
+            userask_form.save(commit=True)
+            return JsonResponse({
+                "status":"success"
+            })
+        else:
+            return JsonResponse({
+                "status": "fail",
+                'msg':'添加出错'
+            })
+
+
+
 class OrgView(View):
     def get(self, request, *args, **kwargs):
         #从数据库中获取 课程机构 全部的数据

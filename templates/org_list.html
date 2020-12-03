@@ -65,14 +65,14 @@
 {#                这里都是存放课程机构的标签   只需要遍历这些标签#}
                 <dl class="des difdes">
                     <dt>
-                        <a href="org-detail-homepage.html">
+                        <a href="{% url 'org:home' org.id%}">
 {#                            {{ MEDIA_URL }}{{ org.image }} 这个是上传照片的路径访问url  其中MEDIA_URL，是上下文处理器可以再setting当中的'django.template.context_processors.media'中查看#}
                             <img width="200" height="120" class="scrollLoading" data-url="{{ MEDIA_URL }}{{ org.image }}"/>
                         </a>
                     </dt>
                     <dd>
                         <div class="clearfix">
-                             <a href="org-detail-homepage.html">
+                             <a href="{% url 'org:home' org.id%}">
                                  <h1>{{ org.name }}</h1>
                                  <div class="pic fl">
 {#                                        判断是否是认证的#}
@@ -141,6 +141,7 @@
 	<div class="right companyright">
 			<div class="head">我要学习</div>
 			<form class="rightform" id="jsStayForm">
+                {%csrf_token%}
 				<div>
                     <img src="{% static 'images/rightform1.png' %}"/>
                     <input type="text" name="name" id="companyName" placeholder="名字" maxlength="25" />
@@ -180,3 +181,31 @@
 </section>
 
 {% endblock content %}
+
+{% block custom_js %}
+    <script>
+    $(function(){
+        $(document).ready(function() {
+            $('#jsStayBtn').on('click', function () {
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: "{% url 'org:add_ask' %}",
+                    data: $('#jsStayForm').serialize(),
+                    async: true,
+                    success: function (data) {
+                        if (data.status == 'success') {
+                            $('#jsStayForm')[0].reset();
+                            $('#jsCompanyTips').html("");
+                            alert("提交成功")
+                        } else if (data.status == 'fail') {
+                            $('#jsCompanyTips').html(data.msg)
+                        }
+                    },
+                });
+            });
+        });
+    })
+
+</script>
+{% endblock %}
