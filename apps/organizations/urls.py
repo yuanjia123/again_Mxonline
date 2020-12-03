@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from apps.organizations.views import OrgView,AddAskView,OrgHomeView,OrgTeacherView
+from apps.organizations.views import OrgView,AddAskView,OrgHomeView,OrgTeacherView,OrgDescView
 from django.urls import include, path
 
 urlpatterns = [
@@ -13,5 +13,7 @@ urlpatterns = [
     path('<int:org_id>/',OrgHomeView.as_view(),name = "home"),
 
     #机构教师列表
-    url(r'^(?P<org_id>\d+)/teacher/$',OrgTeacherView.as_view(),name = "teacher")
+    url(r'^(?P<org_id>\d+)/teacher/$',OrgTeacherView.as_view(),name = "teacher"),
+
+    url(r"^(?P<org_id>\d+)/desc/$",OrgDescView.as_view(),name = "desc")
 ]

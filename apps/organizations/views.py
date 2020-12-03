@@ -10,6 +10,22 @@ from apps.organizations.forms import AddAskForm
 from django.http import JsonResponse
 
 
+class OrgDescView(View):
+    def get(self, request, org_id, *args, **kwargs):
+        current_page = 'desc'
+        course_org = CourseOrg.objects.get(id=int(org_id))
+        course_org.click_nums += 1
+        course_org.save()
+
+        return render(request, "org-detail-desc.html", {
+            "course_org": course_org,
+            "current_page": current_page,
+        })
+
+
+
+
+
 class OrgTeacherView(View):
     def get(self, request, org_id, *args, **kwargs):
         course_org = CourseOrg.objects.get(id=int(org_id))
