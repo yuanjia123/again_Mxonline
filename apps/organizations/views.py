@@ -10,7 +10,37 @@ from apps.organizations.forms import AddAskForm
 from django.http import JsonResponse
 
 
+class OrgCourseView(View):
+    '''
+    机构课程
+    '''
+    def get(self,request,org_id,*args,**kwargs):
+        current_page = 'course'
+        course_org = CourseOrg.objects.get(id=int(org_id))
+        course_org.click_nums += 1
+        course_org.save()
+
+        all_courses = course_org.course_set.all()
+
+        # 对课程机构数据进行分页
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(all_courses, per_page=1, request=request)
+        courses = p.page(page)
+
+        return render(request, "org-detail-course.html", {
+            "all_courses": courses,
+            "course_org": course_org,
+            "current_page": current_page,
+        })
+
 class OrgDescView(View):
+    '''
+    详细列表页面
+    '''
     def get(self, request, org_id, *args, **kwargs):
         current_page = 'desc'
         course_org = CourseOrg.objects.get(id=int(org_id))
@@ -27,6 +57,9 @@ class OrgDescView(View):
 
 
 class OrgTeacherView(View):
+    '''
+    机构老师
+    '''
     def get(self, request, org_id, *args, **kwargs):
         course_org = CourseOrg.objects.get(id=int(org_id))
         course_org.click_nums += 1
@@ -91,6 +124,9 @@ class AddAskView(View):
 
 
 class OrgView(View):
+    '''
+    授课机构首页
+    '''
     def get(self, request, *args, **kwargs):
         #从数据库中获取 课程机构 全部的数据
         all_orgs = CourseOrg.objects.all()

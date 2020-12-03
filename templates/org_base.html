@@ -25,7 +25,7 @@
 				<div class="wp">
 					<div class="fl">
                         <p>联系方式：<b>3333333333</b></p>
-                        {% if request.user.is_authenticated %}
+
                         <div class="personal">
                             <dl class="user fr">
                                 <dd>yuanjia<img class="down fr" src="/static/images/top_down.png"/></dd>
@@ -45,7 +45,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        {% if request.user.is_authenticated %}
                         {% else %}
 
 <!--                        <a style="color:white" class="fr registerbtn" href="{% url 'register' %}">注册</a>-->
@@ -99,7 +99,7 @@
 		<div class="left">
 			<ul>
 				<li class="{%ifequal current_page 'home'%}active2{%endifequal%}"><a href="{% url 'org:home' course_org.id%}">机构首页</a></li>
-                <li class="{%ifequal current_page 'course'%}active2{%endifequal%}"><a href="org-detail-course.html">机构课程</a></li>
+                <li class="{%ifequal current_page 'course'%}active2{%endifequal%}"><a href="{% url 'org:course' course_org.id %}">机构课程</a></li>
                 <li class="{%ifequal current_page 'desc'%}active2{%endifequal%}"><a href="{% url 'org:desc' course_org.id %}">机构介绍</a></li>
                 <li class="{%ifequal current_page 'teacher'%}active2{%endifequal%}"><a href="{% url 'org:teacher' course_org.id %}">机构讲师</a></li>
 			</ul>
