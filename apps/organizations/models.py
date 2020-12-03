@@ -69,6 +69,7 @@ class CourseOrg(BaseModel):
 
     def __str__(self):
         return self.name
+
     class Meta:
         verbose_name = "课程机构"
         verbose_name_plural = verbose_name
@@ -97,5 +98,7 @@ class Teacher(BaseModel):
     def __str__(self):
         return self.name
 
+
+    #老师的课程数   **老师表关联课程表 在teacher表中使用course_set找到这个老师的所有的课程数
     def course_nums(self):
         return self.course_set.all().count()

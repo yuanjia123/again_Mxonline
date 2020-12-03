@@ -10,6 +10,20 @@ from apps.organizations.forms import AddAskForm
 from django.http import JsonResponse
 
 
+class OrgTeacherView(View):
+    def get(self, request, org_id, *args, **kwargs):
+        course_org = CourseOrg.objects.get(id=int(org_id))
+        course_org.click_nums += 1
+        course_org.save()
+        current_page = "teacher"
+        #拿到这个机构所有的 老师
+        all_teacher = course_org.teacher_set.all()
+        return render(request,"org-detail-teachers.html",{
+            "all_teacher":all_teacher,
+            "course_org":course_org,
+            "current_page":current_page,
+        })
+
 class OrgHomeView(View):
     '''
     显示机构的详细页面
@@ -24,15 +38,18 @@ class OrgHomeView(View):
         course_org.click_nums += 1
         course_org.save()
 
-        #显示三个课程
+        current_page = "home"
+
+        #显示这个机构的三个课程
         all_courses = course_org.course_set.all()[:3]
-        #显示一个老师
+        #显示这个机构的一个老师
         all_teacher = course_org.teacher_set.all()[:1]
 
         return render(request,"org-detail-homepage.html",{
             'all_courses':all_courses,
             'all_teacher':all_teacher,
-            'course_org':course_org
+            'course_org':course_org,
+            'current_page':current_page
         })
 
 
