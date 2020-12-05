@@ -8,7 +8,7 @@ from Mxonline.settings import MEDIA_URL
 
 from apps.organizations.forms import AddAskForm
 from django.http import JsonResponse
-
+from apps.operation.models import UserFavorite
 
 class OrgCourseView(View):
     '''
@@ -31,10 +31,19 @@ class OrgCourseView(View):
         p = Paginator(all_courses, per_page=1, request=request)
         courses = p.page(page)
 
+        #判断用户是否收藏
+        has_fav = False
+        #如果已经登录
+        if request.user.is_authenticated:
+
+            if UserFavorite.objects.filter(user=request.user, fav_id=course_org.id, fav_type=2):
+                has_fav = True
+
         return render(request, "org-detail-course.html", {
             "all_courses": courses,
             "course_org": course_org,
             "current_page": current_page,
+            "has_fav": has_fav
         })
 
 class OrgDescView(View):
@@ -47,9 +56,19 @@ class OrgDescView(View):
         course_org.click_nums += 1
         course_org.save()
 
+        # 判断用户是否收藏
+        has_fav = False
+        # 如果已经登录
+        if request.user.is_authenticated:
+
+            if UserFavorite.objects.filter(user=request.user, fav_id=course_org.id, fav_type=2):
+                has_fav = True
+
+
         return render(request, "org-detail-desc.html", {
             "course_org": course_org,
             "current_page": current_page,
+            "has_fav": has_fav
         })
 
 
@@ -65,12 +84,22 @@ class OrgTeacherView(View):
         course_org.click_nums += 1
         course_org.save()
         current_page = "teacher"
+
+        # 判断用户是否收藏
+        has_fav = False
+        # 如果已经登录
+        if request.user.is_authenticated:
+
+            if UserFavorite.objects.filter(user=request.user, fav_id=course_org.id, fav_type=2):
+                has_fav = True
+
         #拿到这个机构所有的 老师
         all_teacher = course_org.teacher_set.all()
         return render(request,"org-detail-teachers.html",{
             "all_teacher":all_teacher,
             "course_org":course_org,
             "current_page":current_page,
+            "has_fav": has_fav
         })
 
 class OrgHomeView(View):
@@ -94,11 +123,20 @@ class OrgHomeView(View):
         #显示这个机构的一个老师
         all_teacher = course_org.teacher_set.all()[:1]
 
+        # 判断用户是否收藏
+        has_fav = False
+        # 如果已经登录
+        if request.user.is_authenticated:
+
+            if UserFavorite.objects.filter(user=request.user, fav_id=course_org.id, fav_type=2):
+                has_fav = True
+
         return render(request,"org-detail-homepage.html",{
             'all_courses':all_courses,
             'all_teacher':all_teacher,
             'course_org':course_org,
-            'current_page':current_page
+            'current_page':current_page,
+            "has_fav": has_fav
         })
 
 
@@ -173,6 +211,8 @@ class OrgView(View):
         #对课程机构数据进行分页     per_page=5每页显示5条数据
         p = Paginator(all_orgs,per_page=10, request=request)
         orgs = p.page(page)
+
+
 
         #
         return render(request, 'org_list.html',{

@@ -60,5 +60,7 @@ urlpatterns = [
     # url(r'^org_list/',OrgView.as_view(), name = 'org_list'),
     url(r'^org/',include(('apps.organizations.urls',"organizations"),namespace='org')),
 
+    #用户相关操作
+    url(r'^op/', include(('apps.operation.urls', "operations"), namespace="op")),
 
 ]
