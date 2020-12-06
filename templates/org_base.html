@@ -63,8 +63,13 @@
             <div class="head fl">
                 <h1>
                     {{course_org.name}}
-                    <img src="{%static 'images/authentication.png'%}"/>
+                    {% if course_org.is_auth %}
+                        <img src="{%static 'images/authentication.png'%}"/>
+                    {% endif %}
+
+                    {% if course_org.is_gold %}
                     <img src="{%static 'images/gold.png'%}"/>
+                    {% endif %}
                 </h1>
                 <p class="fl">
                     <span class="fl" style="margin-top:8px;color:#848484;">推荐指数： </span>
