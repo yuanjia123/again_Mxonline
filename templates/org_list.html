@@ -167,7 +167,7 @@
 <!--                        forloop.counter1 当前的for循环索引-->
                     <dt class="num fl">{{forloop.counter1}}</dt>
                     <dd>
-                        <a href="/company/2/"><h1>{{org.name}}</h1></a>
+                        <a href="{% url 'org:home' org.id %}"><h1>{{org.name}}</h1></a>
                         <p>{{org.address}}</p>
                     </dd>
                 </dl>
