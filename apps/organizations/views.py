@@ -48,7 +48,7 @@ class OrgCourseView(View):
 
 class OrgDescView(View):
     '''
-    详细列表页面
+    机构详细页面
     '''
     def get(self, request, org_id, *args, **kwargs):
         current_page = 'desc'
@@ -142,7 +142,7 @@ class OrgHomeView(View):
 
 class AddAskView(View):
     '''
-    处理用户处理视图
+    处理用户消息视图
     '''
 
     def post(self, request, *args, **kwargs):
