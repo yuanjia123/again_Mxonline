@@ -33,7 +33,7 @@ class AddFavView(View):
 
             #数据查询 判断用户是否已经收藏
             existed_records = UserFavorite.objects.filter(user=request.user,fav_id = fav_id,fav_type=fav_type)
-            print("已经收藏了--------------",len(list(existed_records)))
+
             # 如果收藏了
             if existed_records:
                 #删除收藏
