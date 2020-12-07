@@ -28,5 +28,6 @@ class CourseListView(View):
 
         return render(request,'course-list.html',{
             "all_courses":courses,
-            'sort':sort
+            'sort':sort,
+            'hot_courses':hot_courses
         })
