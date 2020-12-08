@@ -50,6 +50,9 @@ class Course(BaseModel):
     def __str__(self):
         return self.name
 
+    def lesson_nums(self):
+        #显示课程的章节数
+        return self.lesson_set.all().count()
 
 class Lesson(BaseModel):
     '''
