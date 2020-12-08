@@ -54,6 +54,20 @@ class Course(BaseModel):
         #显示课程的章节数
         return self.lesson_set.all().count()
 
+
+class CourseTag(BaseModel):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="课程")
+    tag = models.CharField(max_length=100, verbose_name="标签")
+
+    class Meta:
+        verbose_name = "课程标签"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.tag
+
+
+
 class Lesson(BaseModel):
     '''
     章节表

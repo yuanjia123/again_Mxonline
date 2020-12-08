@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from apps.courses.models import Course
+from apps.courses.models import Course,CourseTag
 from django.views.generic.base import View
 from pure_pagination import Paginator,PageNotAnInteger
 from apps.operation.models import UserFavorite
@@ -59,9 +59,40 @@ class CourseDetailView(View):
             if UserFavorite.objects.filter(user=request.user,fav_id=course.course_org.id,fav_type = 2):
                 has_fav_org = True
 
+
+        #用户推荐  一个标签  有这种方式
+        tag = course.tag
+        related_courses = []
+        if tag:
+            #查找 相同标签的课程、做热门推荐
+            # 比如：flask和django都是python就是相同标签。
+            # [:3]：寻找前三个 。
+            # exclude(id=course.id)：意思是显示除了当前课程   当标签只有一个的时候、可以这样写
+            related_courses = Course.objects.filter(tag=tag).exclude(id=course.id)[:3]
+
+        #拿到课程所对应的所有的标签对象
+        tags = course.coursetag_set.all()
+
+        #第一种方式
+        # tag_li = []
+        # for tag in tags:
+        #     tag_li.append(tag.tag)
+
+        # 第二种方式  列表推到是
+        tag_list = [tag.tag for tag in tags]
+        # 以上两种写法都是把 当前的课程所对应的标签放到  tag_list当中
+
+        #当一个课程有多个标签的时候 、要寻找和他相似的课程、用下面的方法  俗称 多对多   exclude(course__id=course.id):除了的意思
+        course_tags = CourseTag.objects.filter(tag__in=tag_list).exclude(course__id=course.id)
+        related_courses = set()
+        for course_tag in course_tags:
+            related_courses.add(course_tag.course)
+
+
         return render(request,"course-detail.html",{
             "course":course,
             'has_fav_course':has_fav_course,
-            'has_fav_org':has_fav_org
+            'has_fav_org':has_fav_org,
+            "related_courses": related_courses
         })
 
