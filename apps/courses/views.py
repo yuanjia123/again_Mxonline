@@ -48,6 +48,7 @@ class CourseDetailView(View):
 
         has_fav_course = False
         has_fav_org = False
+
         #判断是否绑定
         if request.user.is_authenticated:
             #条件查询的第一个参数值的是  用户通过request.user可以知道前端是哪个用户
