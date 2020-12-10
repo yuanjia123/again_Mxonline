@@ -61,16 +61,16 @@ class CourseDetailView(View):
 
 
         #用户推荐  一个标签  有这种方式
-        tag = course.tag
-        related_courses = []
-        if tag:
+        #tag = course.tag
+        #related_courses = []
+        #if tag:
             #查找 相同标签的课程、做热门推荐
             # 比如：flask和django都是python就是相同标签。
             # [:3]：寻找前三个 。
             # exclude(id=course.id)：意思是显示除了当前课程   当标签只有一个的时候、可以这样写
-            related_courses = Course.objects.filter(tag=tag).exclude(id=course.id)[:3]
+            #related_courses = Course.objects.filter(tag=tag).exclude(id=course.id)[:3]
 
-        #拿到课程所对应的所有的标签对象
+        #用户推荐：一个文章有多个标签、 拿到课程所对应的所有的标签对象
         tags = course.coursetag_set.all()
 
         #第一种方式
@@ -78,14 +78,20 @@ class CourseDetailView(View):
         # for tag in tags:
         #     tag_li.append(tag.tag)
 
-        # 第二种方式  列表推到是
+        # 第二种方式  列表推到是  把所有的标签放到一个列表当中去
         tag_list = [tag.tag for tag in tags]
         # 以上两种写法都是把 当前的课程所对应的标签放到  tag_list当中
 
+
+        #查找在列表当中的标签   标签tag__in=tag_list  意思是 where tag in ['python','web']
         #当一个课程有多个标签的时候 、要寻找和他相似的课程、用下面的方法  俗称 多对多   exclude(course__id=course.id):除了的意思
-        course_tags = CourseTag.objects.filter(tag__in=tag_list).exclude(course__id=course.id)
+        #在标签表查询、所有在list里面的标签、 不包含                          如果要对course课程当中的name字段进行过滤可以使用  course__name
+        course_tags = CourseTag.objects.filter(tag__in=tag_list).exclude(course_id=course.id)
+        #set对象
         related_courses = set()
+        #查找相同标签的  课程、放到set类型的related_courses当中
         for course_tag in course_tags:
+            #遍历这个标签列表、拿到每个标签的课程、添加到set当中去
             related_courses.add(course_tag.course)
 
 
