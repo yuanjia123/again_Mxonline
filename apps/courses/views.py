@@ -102,3 +102,16 @@ class CourseDetailView(View):
             "related_courses": related_courses
         })
 
+
+class CourseLessonView(View):
+    def get(self, request, course_id, *arg, **kwargs):
+        # 通过传递过来的id 进行查询、查询到要看的具体的课程
+        course = Course.objects.get(id=int(course_id))
+        # 点击数+1
+        course.click_nums += 1
+        course.save()
+        return render(request, "course-video.html",{
+            "course":course,
+        })
+
+
