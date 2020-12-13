@@ -22,6 +22,9 @@ from apps.users.models import UserProfile
 
 
 class RegisterView(View):
+    '''
+    注册
+    '''
     def get(self,request,*args,**kwargs):
         register_get_form = RegisterGetForm()
         return render(request,'register.html',{

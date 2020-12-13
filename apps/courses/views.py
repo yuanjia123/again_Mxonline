@@ -3,7 +3,7 @@ from apps.courses.models import Course,CourseTag
 from django.views.generic.base import View
 from pure_pagination import Paginator,PageNotAnInteger
 from apps.operation.models import UserFavorite
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 class CourseListView(View):
     def get(self,request,*args,**kwargs):
@@ -103,7 +103,8 @@ class CourseDetailView(View):
         })
 
 
-class CourseLessonView(View):
+class CourseLessonView(LoginRequiredMixin, View):
+    login_url = '/login/'
     def get(self, request, course_id, *arg, **kwargs):
         # 通过传递过来的id 进行查询、查询到要看的具体的课程
         course = Course.objects.get(id=int(course_id))
