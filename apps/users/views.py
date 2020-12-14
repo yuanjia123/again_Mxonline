@@ -74,6 +74,18 @@ class DynamicLoginView(View):
     '''
     短信验证码的    登录验证
     '''
+
+    def get(self,request,*args,**kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('index'))
+        next = request.GET.get("next","")
+        login_form = DynamicLoginForm()
+        return render(request,'login.html',{
+            'login_form':login_form,
+            'next':next
+        })
+
+
     def post(self,request,*args,**kwargs):
         login_form = DynamicLoginPostForm(request.POST)
 
@@ -110,6 +122,13 @@ class DynamicLoginView(View):
                 user.save()
             #保存用户的信息
             login(request, user)
+
+            #获取next
+            next = request.GET.get('next', "")
+            if next:
+                # 直接跳转到http://127.0.0.1:8001/course/1/lesson/  这个页面
+                return HttpResponseRedirect(next)
+
             # 跳转到主页
             return HttpResponseRedirect(reverse("index"))
 
@@ -184,13 +203,16 @@ class LoginView(View):
         #在index.html页面里面27行 有判断是否登录 如果登录直接跳转到首页
         if request.user.is_authenticated:
             return HttpResponseRedirect(reverse("index"))
+        #在公开课、详细章节页面、点击开始学习如果没有登录、会跳转到登陆页面、在get方法中拿到要访问的页面、
+        next = request.GET.get("next","")
 
         #实例化图片验证码表单
         login_form = DynamicLoginForm()
 
         #否则跳转到登陆页面  并且传递验证码给登录页面
         return render(request,'login.html',{
-            "login_form":login_form
+            "login_form":login_form,
+            'next':next
         })
 
     def post(self,request,*args,**kwargs):
@@ -207,9 +229,20 @@ class LoginView(View):
             #验证用户名、密码是否存在
             user = authenticate(username=user_name, password=password)
             if user is not None:
+                # 如果登录成功  拿到?next=/course/1/lesson/  其中？后面的数据、登录成功以后直接跳转到课程的详细章节页面
+                next = request.GET.get('next', "")
+
                 # 如果登录成功、记录登录信息     调用login以后、就是一种登录的状态
                 login(request, user)
                 # 跳转到主页   index  就是  主页name属性修改后的属性
+
+                #如果存在next
+                if next:
+                    #直接跳转到http://127.0.0.1:8001/course/1/lesson/  这个页面
+                    return HttpResponseRedirect(next) #如果存在next
+
+
+
                 return HttpResponseRedirect(reverse('index'))
             #如果账号或者密码验证错误、则传递msg  和 login_form到这个里面
             else:

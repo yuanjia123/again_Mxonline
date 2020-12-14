@@ -73,7 +73,7 @@
                 </div>
 {#                class="tab-form hide"   代表的是css隐藏标签#}
                 {#                如果dynamic_login是Ture则显示hide  意思是隐藏账号登录#}
-                <form class="tab-form {% if dynamic_login %}hide{% else %}{% endif %}" action="{% url 'login' %}" method="post" autocomplete="off" id="form1">
+                <form class="tab-form {% if dynamic_login %}hide{% else %}{% endif %}" action="{% url 'login' %}?next={{ next }}" method="post" autocomplete="off" id="form1">
                     {% csrf_token %}
                     {#                    class="form-group marb8 errorput"  输入框会变成红色，是一种样式   下面这样写如果验证不通过 输入框爆红#}
                     <div class="form-group marb20 {% if login_form.errors.username %}errorput{% endif %}">

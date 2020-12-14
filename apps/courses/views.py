@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from apps.courses.models import Course,CourseTag
+from apps.courses.models import Course,CourseTag,CourseResource
 from django.views.generic.base import View
 from pure_pagination import Paginator,PageNotAnInteger
-from apps.operation.models import UserFavorite
+from apps.operation.models import UserFavorite,UserCourse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 class CourseListView(View):
@@ -104,6 +104,12 @@ class CourseDetailView(View):
 
 
 class CourseLessonView(LoginRequiredMixin, View):
+    '''
+    登陆以后、才能访问课程详细章详细页面
+    0、在django官方文档当中搜索、login_required
+    1、引入类视图的   模块from django.contrib.auth.mixins import LoginRequiredMixin
+    2、在login_url中定义、如果未登录、则跳转登录页面
+    '''
     login_url = '/login/'
     def get(self, request, course_id, *arg, **kwargs):
         # 通过传递过来的id 进行查询、查询到要看的具体的课程
@@ -111,8 +117,20 @@ class CourseLessonView(LoginRequiredMixin, View):
         # 点击数+1
         course.click_nums += 1
         course.save()
+
+        #查询用户是否已经关联了该课程
+        user_courses = UserCourse.objects.filter(user=request.user,course=course)
+        #如果没有关联
+        if not user_courses:
+            #赋值、谁关联了哪门课
+            user_courses = UserCourse(user=request.user,course=course)
+            user_courses.save()
+
+        #拿到这个课程所对应的课程资源
+        course_resources = CourseResource.objects.filter(course=course)
         return render(request, "course-video.html",{
             "course":course,
+            'course_resources':course_resources
         })
 
 
