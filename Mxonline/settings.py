@@ -136,7 +136,7 @@ yp_apikey = '92201394a24e2e320e7922eeaa76e498'
 REDIS_HOST = "127.0.0.1"
 REDIS_PORT = 6379
 
-#把上传文件访问的Url前面都应该加上 这个/media/
+#访问上传的图片 这个/media/
 MEDIA_URL = "/media/"
 #上传的文件应该放在media文件下面
 MEDIA_ROOT = os.path.join(BASE_DIR,"media")

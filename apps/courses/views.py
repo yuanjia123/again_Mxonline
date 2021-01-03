@@ -2,8 +2,60 @@ from django.shortcuts import render
 from apps.courses.models import Course,CourseTag,CourseResource
 from django.views.generic.base import View
 from pure_pagination import Paginator,PageNotAnInteger
-from apps.operation.models import UserFavorite,UserCourse
+from apps.operation.models import UserFavorite,UserCourse,CourseComments
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+class CourseCommentsView(View):
+    login_url = '/login/'
+
+    def get(self, request, course_id, *arg, **kwargs):
+        # 通过传递过来的id 进行查询、查询到要看的具体的课程
+        course = Course.objects.get(id=int(course_id))
+        # 点击数+1
+        course.click_nums += 1
+        course.save()
+
+        # 查询用户是否已经关联了该课程
+        user_courses = UserCourse.objects.filter(user=request.user, course=course)
+        # 如果没有关联
+        if not user_courses:
+            # 赋值、谁关联了哪门课
+            user_courses = UserCourse(user=request.user, course=course)
+            user_courses.save()
+
+            course.students += 1
+            course.save()
+
+        # 学习过该课程的所有的同学
+        user_courses = UserCourse.objects.filter(course=course)
+        # 拿到该课程所有学生的id
+        user_ids = [user_course.user.id for user_course in user_courses]
+        # 通过所有课程有关同学的id、找到所有的同学   拿到课程对象
+        # user_id__in = user_ids  意思是UserCourse表的用户id字段  in [user_ids]     order_by('course__click_nums') 对这些课程进行倒叙排列
+        all_courses = UserCourse.objects.filter(user_id__in=user_ids).order_by('course__click_nums')[:5]
+
+        # 使用列表生成式、取出不含现在显示的课程  这样写太复杂不推荐这样写
+        # related_courses = [user_course.course for user_course in all_courses if user_course.course.id != course.id]
+
+        related_courses = []
+        # 便利所有的课程
+        for item in all_courses:
+            if item.course.id != course.id:
+                related_courses.append(item.course)
+
+        # 拿到这个课程所对应的课程资源
+        comments = CourseComments.objects.filter(course=course)
+
+        #因为评论页面很多信息和 课程页面很多数据都是共享的、所以直接复制课程列表页面
+        #拿到这个课程所对应的评论
+        course_resources = CourseResource.objects.filter(course=course)
+        return render(request, "course-comment.html", {
+            "course": course,
+            'course_resources': course_resources,
+            'related_courses': related_courses,
+            'comments':comments
+        })
+
 
 class CourseListView(View):
     def get(self,request,*args,**kwargs):
@@ -126,11 +178,33 @@ class CourseLessonView(LoginRequiredMixin, View):
             user_courses = UserCourse(user=request.user,course=course)
             user_courses.save()
 
+            course.students += 1
+            course.save()
+
+        # 学习过该课程的所有的同学
+        user_courses = UserCourse.objects.filter(course=course)
+        #拿到该课程所有学生的id
+        user_ids = [user_course.user.id for user_course in user_courses]
+        #通过所有课程有关同学的id、找到所有的同学   拿到课程对象
+        #user_id__in = user_ids  意思是UserCourse表的用户id字段  in [user_ids]     order_by('course__click_nums') 对这些课程进行倒叙排列
+        all_courses = UserCourse.objects.filter(user_id__in=user_ids).order_by('course__click_nums')[:5]
+
+
+        #使用列表生成式、取出不含现在显示的课程  这样写太复杂不推荐这样写
+        #related_courses = [user_course.course for user_course in all_courses if user_course.course.id != course.id]
+
+        related_courses = []
+        # 便利所有的课程
+        for item in all_courses:
+            if item.course.id != course.id:
+                related_courses.append(item.course)
+
         #拿到这个课程所对应的课程资源
         course_resources = CourseResource.objects.filter(course=course)
         return render(request, "course-video.html",{
             "course":course,
-            'course_resources':course_resources
+            'course_resources':course_resources,
+            'related_courses':related_courses
         })
 
 

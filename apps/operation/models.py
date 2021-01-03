@@ -31,7 +31,6 @@ class CourseComments(BaseModel):
         return self.comments
 
 
-
 class UserFavorite(BaseModel):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, verbose_name="用户")
     #收藏的哪个课程 、机构、或者老师的哪一条数据的id

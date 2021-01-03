@@ -77,7 +77,7 @@ class DynamicLoginPostForm(forms.Form):
         :return:
         '''
         #data.get 先获取手机号
-        mobile = self.data.get("mobile")
+
         #在获取验证码
         code = self.data.get("code")
         #连接redis

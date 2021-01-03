@@ -40,7 +40,6 @@ class RegisterView(View):
             mobile = register_post_form.cleaned_data["mobile"]
             password = register_post_form.cleaned_data["password"]
 
-
             print("验证成功以后会打印这句话")
 
             #手机号是用户名
@@ -65,9 +64,6 @@ class RegisterView(View):
                 #这个里面有错误信息、传递过去显示出来
                 "register_post_form":register_post_form
             })
-
-
-
 
 #短信验证码的    登录验证
 class DynamicLoginView(View):

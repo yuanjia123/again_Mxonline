@@ -1,13 +1,52 @@
 from django.shortcuts import render
 from django.views.generic import View
-from apps.operation.forms import UserFavForm
-from apps.operation.models import UserFavorite
+from apps.operation.forms import UserFavForm,CommentsForm
+from apps.operation.models import UserFavorite,CourseComments
 
 #如果判断用户没有登录、则返回数据、是Json类型
 from django.http import JsonResponse
 
 from apps.courses.models import Course
 from apps.organizations.models import Teacher,CourseOrg
+
+
+class CommentView(View):
+    def post(self,request,*args,**kwargs):
+        # 1、判断用户是否登录、如果没有登录
+        if not request.user.is_authenticated:
+            # 如果没登录 js会直接跳转到登录页面
+            return JsonResponse({
+                'status': 'fail',
+                'msg': '用户未登录'
+            })
+
+        comment_form = CommentsForm(request.POST)
+
+        if comment_form.is_valid():
+
+            course = comment_form.cleaned_data['course']
+            comments = comment_form.cleaned_data['comments']
+
+            #给评论表添加数据
+            #添加用户
+            comment = CourseComments()
+            comment.user = request.user
+            comment.comments = comments
+
+            #添加课程
+            comment.course = course
+            comment.save()
+            print("------------------------评论插入成功")
+            return JsonResponse({
+                'status': 'success',
+            })
+
+        else:
+            return JsonResponse({
+                'status': 'fail',
+                'msg': '参数错误',
+            })
+
 
 class AddFavView(View):
     def post(self,request,*args,**kwargs):
