@@ -25,7 +25,6 @@ class RegisterPostForm(forms.Form):
         if users:
             #输出异常
             raise  forms.ValidationError("手机号已经存在")
-
         return mobile
 
     def clean_code(self):
@@ -44,7 +43,6 @@ class RegisterPostForm(forms.Form):
 
 class LoginForm(forms.Form):
     '''
-
     账号登录的验证
     '''
     #名称要必须和视图中的名字一样
@@ -77,7 +75,7 @@ class DynamicLoginPostForm(forms.Form):
         :return:
         '''
         #data.get 先获取手机号
-
+        mobile = self.data.get("mobile")
         #在获取验证码
         code = self.data.get("code")
         #连接redis
