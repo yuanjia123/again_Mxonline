@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic.base import View
 #把课程相关系的模型拿到
-from apps.organizations.models import CourseOrg,City
+from apps.organizations.models import CourseOrg,City,Teacher
 from django.shortcuts import render_to_response
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from Mxonline.settings import MEDIA_URL
@@ -9,6 +9,41 @@ from Mxonline.settings import MEDIA_URL
 from apps.organizations.forms import AddAskForm
 from django.http import JsonResponse
 from apps.operation.models import UserFavorite
+
+class TeacherListView(View):
+    def get(self, request, *args, **kwargs):
+        all_teachers = Teacher.objects.all()
+        teacher_nums = all_teachers.count()
+
+        hot_teachers = Teacher.objects.all().order_by("-click_nums")[:3]
+
+        keywords = request.GET.get("keywords", "")
+        s_type = "teacher"
+        if keywords:
+            all_teachers = all_teachers.filter(Q(name__icontains=keywords))
+
+        # 对讲师进行排序
+        sort = request.GET.get("sort", "")
+        if sort == "hot":
+            all_teachers = all_teachers.order_by("-click_nums")
+
+        # 对讲师数据进行分页
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(all_teachers, per_page=1, request=request)
+        teachers = p.page(page)
+
+        return render(request, "teachers-list.html", {
+            "teachers":teachers,
+            "teacher_nums":teacher_nums,
+            "sort":sort,
+            "hot_teachers":hot_teachers,
+            # "keywords": keywords,
+            # "s_type": s_type
+        })
 
 class OrgCourseView(View):
     '''
@@ -70,9 +105,6 @@ class OrgDescView(View):
             "current_page": current_page,
             "has_fav": has_fav
         })
-
-
-
 
 
 class OrgTeacherView(View):
